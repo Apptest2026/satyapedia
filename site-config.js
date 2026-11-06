@@ -3,5 +3,5 @@ window.SP={
   email:'lodhamofficial@gmail.com',
   officer:'Grievance Officer, SatyaPedia',
   place:'India',
-  court:'surat'
+  court:'Surat'
 };
