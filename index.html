@@ -40,6 +40,7 @@ html[lang="hi"] .en{display:none!important}html:not([lang="hi"]) .hi{display:non
 /* ====== STEP 1: paste your Supabase values here ====== */
 const SUPABASE_URL='https://nlxjzdarpnuawzjhwrlj.supabase.co';
 const SUPABASE_KEY='sb_publishable_jOUtfcqlj7iW0paHZztO-A_pV2PsNj5';
+const DELETE_DOCS=true; // true = ID photo is deleted after you approve/reject (safer)
 /* ===================================================== */
 addEventListener('error',ev=>{const a=document.getElementById('app');if(a)a.insertAdjacentHTML('afterbegin','<div class="msg">⚠ '+ev.message+'</div>')});
 if(SUPABASE_URL.startsWith('PASTE')||SUPABASE_KEY.startsWith('PASTE')){document.getElementById('app').innerHTML='<div class="msg">⚠ Supabase URL / anon key not set in index.html (अभी paste नहीं की गई)</div>';throw new Error('Supabase keys missing')}
@@ -49,16 +50,16 @@ const D={en:{home:'Home',dash:'My Account',admin:'Admin',login:'Log in',signup:'
 kycT:'KYC verification',docType:'Document',idNo:'ID number (PAN / Aadhaar / Voter ID)',file:'Photo of ID (image/PDF)',submit:'Submit',st:'KYC status',pending:'Pending review',verified:'Verified',rejected:'Rejected — submit again',
 kind:'Account type',personal:'Personal',business:'Business',name:'Name',founder:'Founder / Full name',est:'Established / Date of birth',gst:'GST number (business only)',address:'Address',product:'Product / Work',vals:'Core values',bio:'About',
 create:'Create profile',save:'Save',log:'Edit history',total:'Total edits',none:'No edits yet',locked:'Locked after verification',empty:'No profiles yet.',
-noKyc:'Submit KYC first to get your tick.',ok:'Done',tick:{common:'Common person',biz:'Business (GST)',gov:'Government',opp:'Opposition',celeb:'Celebrity',premium:'Celebrity Premium'},
+noKyc:'KYC is optional. Submit it to get your tick and appear on Google. Your ID photo is deleted after review.',ok:'Done',tick:{common:'Common person',biz:'Business (GST)',gov:'Government',opp:'Opposition',celeb:'Celebrity',premium:'Celebrity Premium'},
 rules:'Rules: 1 KYC = max 2 accounts (1 personal + 1 business). 1 GST = 1 business account. Key fields lock after verification. Every change is public.',
-pend:'Pending KYC',approve:'Approve',reject:'Reject',view:'View document',tickSel:'Tick type',demo:'Back',last:'Last change',notfound:'Not found',need:'Please log in first.',headline:'One-line intro (shown on Google)',city:'City',category:'Who are you?',share:'Your public page',copy:'Copy link',wa:'Share on WhatsApp',strength:'Page strength',seo:'Your page appears on Google only after KYC is verified.',cat:{Politician:'Politician',Celebrity:'Celebrity',Business:'Business / Shop',Professional:'Doctor / Lawyer / Teacher',Artist:'Artist / Creator',Journalist:'Journalist',Farmer:'Farmer',Student:'Student',Other:'Other'}},
+pend:'Pending KYC',approve:'Approve',reject:'Reject',view:'View document',tickSel:'Tick type',demo:'Back',last:'Last change',notfound:'Not found',need:'Please log in first.',headline:'One-line intro (shown on Google)',city:'City',category:'Who are you?',share:'Your public page',copy:'Copy link',wa:'Share on WhatsApp',strength:'Page strength',seo:'Your page works by link, but stays hidden from Google until KYC is verified.',cat:{Politician:'Politician',Celebrity:'Celebrity',Business:'Business / Shop',Professional:'Doctor / Lawyer / Teacher',Artist:'Artist / Creator',Journalist:'Journalist',Farmer:'Farmer',Student:'Student',Other:'Other'}},
 hi:{home:'मुख्य पृष्ठ',dash:'मेरा खाता',admin:'एडमिन',login:'लॉग इन',signup:'साइन अप',logout:'लॉग आउट',email:'ईमेल',pass:'पासवर्ड (कम से कम 6)',search:'नाम खोजें…',
 kycT:'KYC सत्यापन',docType:'दस्तावेज़',idNo:'ID नंबर (PAN / आधार / वोटर ID)',file:'ID की फोटो (image/PDF)',submit:'जमा करें',st:'KYC स्थिति',pending:'समीक्षा जारी',verified:'सत्यापित',rejected:'अस्वीकृत — दोबारा जमा करें',
 kind:'खाते का प्रकार',personal:'व्यक्तिगत',business:'बिज़नेस',name:'नाम',founder:'संस्थापक / पूरा नाम',est:'स्थापना / जन्म तिथि',gst:'GST नंबर (सिर्फ़ बिज़नेस)',address:'पता',product:'उत्पाद / काम',vals:'मुख्य मूल्य',bio:'परिचय',
 create:'प्रोफ़ाइल बनाएँ',save:'सहेजें',log:'बदलाव का इतिहास',total:'कुल बदलाव',none:'अभी कोई बदलाव नहीं',locked:'सत्यापन के बाद लॉक',empty:'अभी कोई प्रोफ़ाइल नहीं।',
-noKyc:'टिक पाने के लिए पहले KYC जमा करें।',ok:'हो गया',tick:{common:'आम नागरिक',biz:'बिज़नेस (GST)',gov:'सरकार',opp:'विपक्ष',celeb:'सेलिब्रिटी',premium:'सेलिब्रिटी प्रीमियम'},
+noKyc:'KYC वैकल्पिक है। टिक और Google पर दिखने के लिए जमा करें। समीक्षा के बाद आपकी ID की फोटो हटा दी जाती है।',ok:'हो गया',tick:{common:'आम नागरिक',biz:'बिज़नेस (GST)',gov:'सरकार',opp:'विपक्ष',celeb:'सेलिब्रिटी',premium:'सेलिब्रिटी प्रीमियम'},
 rules:'नियम: 1 KYC पर अधिकतम 2 खाते (1 व्यक्तिगत + 1 बिज़नेस)। 1 GST पर 1 बिज़नेस खाता। मुख्य जानकारी सत्यापन के बाद लॉक। हर बदलाव सार्वजनिक।',
-pend:'लंबित KYC',approve:'मंज़ूर',reject:'अस्वीकार',view:'दस्तावेज़ देखें',tickSel:'टिक का प्रकार',demo:'वापस',last:'अंतिम बदलाव',notfound:'नहीं मिला',need:'पहले लॉग इन करें।',headline:'एक लाइन का परिचय (Google पर दिखेगा)',city:'शहर',category:'आप कौन हैं?',share:'आपका सार्वजनिक पेज',copy:'लिंक कॉपी',wa:'WhatsApp पर भेजें',strength:'पेज की मज़बूती',seo:'KYC सत्यापित होने के बाद ही आपका पेज Google पर दिखेगा।',cat:{Politician:'राजनेता',Celebrity:'सेलिब्रिटी',Business:'बिज़नेस / दुकान',Professional:'डॉक्टर / वकील / शिक्षक',Artist:'कलाकार / क्रिएटर',Journalist:'पत्रकार',Farmer:'किसान',Student:'विद्यार्थी',Other:'अन्य'}}};
+pend:'लंबित KYC',approve:'मंज़ूर',reject:'अस्वीकार',view:'दस्तावेज़ देखें',tickSel:'टिक का प्रकार',demo:'वापस',last:'अंतिम बदलाव',notfound:'नहीं मिला',need:'पहले लॉग इन करें।',headline:'एक लाइन का परिचय (Google पर दिखेगा)',city:'शहर',category:'आप कौन हैं?',share:'आपका सार्वजनिक पेज',copy:'लिंक कॉपी',wa:'WhatsApp पर भेजें',strength:'पेज की मज़बूती',seo:'आपका पेज लिंक से खुलता है, पर KYC सत्यापित होने तक Google पर नहीं दिखेगा।',cat:{Politician:'राजनेता',Celebrity:'सेलिब्रिटी',Business:'बिज़नेस / दुकान',Professional:'डॉक्टर / वकील / शिक्षक',Artist:'कलाकार / क्रिएटर',Journalist:'पत्रकार',Farmer:'किसान',Student:'विद्यार्थी',Other:'अन्य'}}};
 const TC={common:'#202122',biz:'#14866d',gov:'#1d9bf0',opp:'#1d9bf0',celeb:'#b8860b',premium:'#b8860b'};
 const t=k=>D[lang][k]||k,e=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $=id=>document.getElementById(id),v=id=>$(id)?$(id).value.trim():'';
@@ -104,7 +105,8 @@ async function me(){if(!U)return $('app').innerHTML='<p>'+t('need')+'</p>';
   '<label>'+t('name')+'</label><input id="nn" style="width:100%"><label>'+t('founder')+'</label><input id="nf" style="width:100%"><label>'+t('est')+'</label><input id="ne" style="width:100%"><div id="gw" style="display:'+(av[0]=='business'?'block':'none')+'"><label>'+t('gst')+'</label><input id="ng" style="width:100%"></div>'+
   '<label>'+t('category')+'</label><select id="nc">'+Object.keys(t('cat')).map(x=>'<option value="'+x+'">'+e(t('cat')[x])+'</option>').join('')+'</select><label>'+t('city')+'</label><input id="nci" style="width:100%"><label>'+t('headline')+'</label><input id="nh" maxlength="160" style="width:100%"><label>'+t('address')+'</label><input id="na" style="width:100%"><br><button class="p" onclick="mk()">'+t('create')+'</button><div id="cm"></div></div>';
  $('app').innerHTML=h+'<div class="box">'+t('rules')+'</div>'}
-async function sendK(){const f=$('fl').files[0],n=v('idn');if(!f||n.length<6)return $('km').innerHTML='<div class="msg">ID + file required</div>';
+async function sendK(){const f=$('fl').files[0],d=v('dt'),n=v('idn').toUpperCase().replace(/\s/g,''),okf=d=='PAN'?/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(n):d=='Aadhaar'?/^[0-9]{12}$/.test(n):n.length>=6;
+ if(!f||!okf)return $('km').innerHTML='<div class="msg">'+(lang=='hi'?'ID नंबर का format सही नहीं है या फोटो नहीं चुनी':'ID number format is wrong or photo not selected')+'</div>';
  await sb.from('kyc').delete().eq('user_id',U.id);const path=U.id+'/'+Date.now()+'_'+f.name.replace(/[^\w.]/g,'_');
  const up=await sb.storage.from('kyc').upload(path,f);if(up.error)return $('km').innerHTML='<div class="msg">'+e(up.error.message)+'</div>';
  const{error}=await sb.from('kyc').insert({user_id:U.id,id_hash:await sha(n),last4:n.slice(-4),doc_type:v('dt'),doc_path:path});
@@ -116,14 +118,17 @@ async function sv(id,L,b){const r={headline:v(id+'headline'),city:v(id+'city'),a
  const{error}=await sb.from('profiles').update(r).eq('id',id);$('s'+id).textContent=error?error.message:'✓ '+t('ok')}
 
 async function adm(){if(!ADM)return $('app').innerHTML='<p>No access</p>';
- const{data}=await sb.from('kyc').select('*').eq('status','pending');const K=data||[];let h='<h1>'+t('pend')+' ('+K.length+')</h1>';
+ const{data}=await sb.from('kyc').select('*').eq('status','pending');const K=data||[];const{data:pp}=K.length?await sb.from('profiles').select('owner,name,kind,gst').in('owner',K.map(k=>k.user_id)):{data:[]};let h='<h1>'+t('pend')+' ('+K.length+')</h1>';
  for(const k of K){const{data:s}=await sb.storage.from('kyc').createSignedUrl(k.doc_path,300);
-  h+='<div class="box">'+e(k.doc_type)+' …'+e(k.last4)+' · <a target="_blank" href="'+(s?.signedUrl||'#')+'">'+t('view')+'</a><br><label>'+t('tickSel')+'</label><select id="t'+k.user_id+'">'+Object.keys(TC).map(x=>'<option value="'+x+'">'+e(t('tick')[x])+'</option>').join('')+'</select> <button class="p" onclick="dec(\''+k.user_id+'\',1)">'+t('approve')+'</button> <button onclick="dec(\''+k.user_id+'\',0)">'+t('reject')+'</button></div>'}
+  const nm=(pp||[]).filter(x=>x.owner==k.user_id).map(x=>e(x.name)+' ('+t(x.kind)+(x.gst?' · GST '+e(x.gst):'')+')').join('<br>')||'—';
+  h+='<div class="box"><b>'+(lang=='hi'?'प्रोफ़ाइल':'Profile')+':</b> '+nm+'<br><small>'+(lang=='hi'?'दस्तावेज़ का नाम इससे मिलाएँ। GST हो तो GST पोर्टल पर जाँचें।':'Match the name on the document. For GST, check it on the GST portal.')+'</small><br>'+e(k.doc_type)+' …'+e(k.last4)+' · <a target="_blank" href="'+(s?.signedUrl||'#')+'">'+t('view')+'</a><br><label>'+t('tickSel')+'</label><select id="t'+k.user_id+'">'+Object.keys(TC).map(x=>'<option value="'+x+'">'+e(t('tick')[x])+'</option>').join('')+'</select> <button class="p" onclick="dec(\''+k.user_id+'\',1)">'+t('approve')+'</button> <button onclick="dec(\''+k.user_id+'\',0)">'+t('reject')+'</button></div>'}
  $('app').innerHTML=h}
 async function dec(u,ok){if(ok){await sb.from('kyc').update({status:'verified'}).eq('user_id',u);
   const{data:ps}=await sb.from('profiles').select('id,kind').eq('owner',u);const tk=v('t'+u);
   for(const p of ps||[])await sb.from('profiles').update({verified:true,tick:p.kind=='business'?'biz':tk}).eq('id',p.id)}
- else await sb.from('kyc').update({status:'rejected'}).eq('user_id',u);adm()}
+ else await sb.from('kyc').update({status:'rejected'}).eq('user_id',u);
+ if(DELETE_DOCS){const{data:k}=await sb.from('kyc').select('doc_path').eq('user_id',u).maybeSingle();if(k&&k.doc_path){await sb.storage.from('kyc').remove([k.doc_path]);await sb.from('kyc').update({doc_path:null}).eq('user_id',u)}}
+ adm()}
 sb.auth.onAuthStateChange(()=>{});init();
 </script>
 </body>
