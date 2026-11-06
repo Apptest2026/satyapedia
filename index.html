@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SatyaPedia – Verified profiles of people &amp; businesses in India | सत्यापित पहचान</title>
+<meta name="description" content="Create a free KYC-verified profile page for yourself or your business in India. आपकी सत्यापित पहचान, Google पर।">
+<meta property="og:title" content="SatyaPedia – Verified profiles in India"><meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"SatyaPedia","inLanguage":["en","hi"]}</script>
+<style>
+body{margin:0;background:#f6f6f6;color:#202122;font:14px/1.6 "Segoe UI",Arial,"Noto Sans Devanagari",sans-serif}
+a{color:#3366cc;cursor:pointer;text-decoration:none}a:hover{text-decoration:underline}
+header{display:flex;justify-content:space-between;align-items:center;background:#fff;border-bottom:1px solid #a2a9b1;padding:8px 16px;flex-wrap:wrap;gap:8px}
+.logo{font:700 20px Georgia,serif}header nav a{margin-left:14px}
+main{max-width:980px;margin:0 auto;background:#fff;border:1px solid #a2a9b1;border-top:0;padding:16px 24px 24px;min-height:70vh}
+h1,h2{font-family:Georgia,serif;font-weight:400;border-bottom:1px solid #a2a9b1;margin:14px 0 8px}h1{font-size:27px}h2{font-size:20px}
+.info{float:right;width:290px;margin:0 0 12px 16px;border:1px solid #a2a9b1;background:#f8f9fa;font-size:13px}
+.info .ti{background:#eaecf0;text-align:center;font-weight:700;padding:6px}
+.info table{width:100%;border-collapse:collapse}.info th,.info td{padding:4px 8px;text-align:left;vertical-align:top;border-top:1px solid #eaecf0}.info th{width:40%}
+.lk{background:#fef6e7}
+.tick{display:inline-block;width:19px;height:19px;border-radius:50%;color:#fff;font-size:12px;text-align:center;line-height:19px;margin-left:6px;vertical-align:middle}
+input,select,textarea,button{font:inherit;padding:5px 8px;border:1px solid #a2a9b1;border-radius:2px;margin:2px 0;max-width:100%}
+button{background:#f8f9fa;cursor:pointer}button.p{background:#36c;color:#fff;border-color:#36c}
+.box{border:1px solid #a2a9b1;background:#f8f9fa;padding:10px 14px;margin:10px 0}
+table.t{border-collapse:collapse;width:100%;font-size:13px}.t th,.t td{border:1px solid #a2a9b1;padding:4px 8px;text-align:left}.t th{background:#eaecf0}
+.foot{border-top:1px solid #a2a9b1;margin-top:20px;padding-top:8px;font-size:12px;color:#54595d;clear:both}
+.msg{padding:6px 10px;margin:8px 0;border:1px solid #a2a9b1;background:#fef6e7}
+label{display:block;margin-top:6px;font-weight:600;font-size:13px}
+@media(max-width:700px){.info{float:none;width:100%;margin:0 0 12px}main{padding:12px}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="#/" style="color:inherit">SatyaPedia ✔</a>
+<nav id="nv"></nav></header>
+<main id="app"></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* ====== STEP 1: paste your Supabase values here ====== */
+const SUPABASE_URL='https://nlxjzdarpnuawzjhwrlj.supabase.co';
+const SUPABASE_KEY='sb_publishable_jOUtfcqlj7iW0paHZztO-A_pV2PsNj5';
+/* ===================================================== */
+addEventListener('error',ev=>{const a=document.getElementById('app');if(a)a.insertAdjacentHTML('afterbegin','<div class="msg">⚠ '+ev.message+'</div>')});
+if(SUPABASE_URL.startsWith('PASTE')||SUPABASE_KEY.startsWith('PASTE')){document.getElementById('app').innerHTML='<div class="msg">⚠ Supabase URL / anon key not set in index.html (अभी paste नहीं की गई)</div>';throw new Error('Supabase keys missing')}
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let lang=localStorage.getItem('lang')||'en',U=null,ADM=false;
+const D={en:{home:'Home',dash:'My Account',admin:'Admin',login:'Log in',signup:'Sign up',logout:'Log out',email:'Email',pass:'Password (min 6)',search:'Search name…',
+kycT:'KYC verification',docType:'Document',idNo:'ID number (PAN / Aadhaar / Voter ID)',file:'Photo of ID (image/PDF)',submit:'Submit',st:'KYC status',pending:'Pending review',verified:'Verified',rejected:'Rejected — submit again',
+kind:'Account type',personal:'Personal',business:'Business',name:'Name',founder:'Founder / Full name',est:'Established / Date of birth',gst:'GST number (business only)',address:'Address',product:'Product / Work',vals:'Core values',bio:'About',
+create:'Create profile',save:'Save',log:'Edit history',total:'Total edits',none:'No edits yet',locked:'Locked after verification',empty:'No profiles yet.',
+noKyc:'Submit KYC first to get your tick.',ok:'Done',tick:{common:'Common person',biz:'Business (GST)',gov:'Government',opp:'Opposition',celeb:'Celebrity',premium:'Celebrity Premium'},
+rules:'Rules: 1 KYC = max 2 accounts (1 personal + 1 business). 1 GST = 1 business account. Key fields lock after verification. Every change is public.',
+pend:'Pending KYC',approve:'Approve',reject:'Reject',view:'View document',tickSel:'Tick type',demo:'Back',last:'Last change',notfound:'Not found',need:'Please log in first.',headline:'One-line intro (shown on Google)',city:'City',category:'Who are you?',share:'Your public page',copy:'Copy link',wa:'Share on WhatsApp',strength:'Page strength',seo:'Your page appears on Google only after KYC is verified.',cat:{Politician:'Politician',Celebrity:'Celebrity',Business:'Business / Shop',Professional:'Doctor / Lawyer / Teacher',Artist:'Artist / Creator',Journalist:'Journalist',Farmer:'Farmer',Student:'Student',Other:'Other'}},
+hi:{home:'मुख्य पृष्ठ',dash:'मेरा खाता',admin:'एडमिन',login:'लॉग इन',signup:'साइन अप',logout:'लॉग आउट',email:'ईमेल',pass:'पासवर्ड (कम से कम 6)',search:'नाम खोजें…',
+kycT:'KYC सत्यापन',docType:'दस्तावेज़',idNo:'ID नंबर (PAN / आधार / वोटर ID)',file:'ID की फोटो (image/PDF)',submit:'जमा करें',st:'KYC स्थिति',pending:'समीक्षा जारी',verified:'सत्यापित',rejected:'अस्वीकृत — दोबारा जमा करें',
+kind:'खाते का प्रकार',personal:'व्यक्तिगत',business:'बिज़नेस',name:'नाम',founder:'संस्थापक / पूरा नाम',est:'स्थापना / जन्म तिथि',gst:'GST नंबर (सिर्फ़ बिज़नेस)',address:'पता',product:'उत्पाद / काम',vals:'मुख्य मूल्य',bio:'परिचय',
+create:'प्रोफ़ाइल बनाएँ',save:'सहेजें',log:'बदलाव का इतिहास',total:'कुल बदलाव',none:'अभी कोई बदलाव नहीं',locked:'सत्यापन के बाद लॉक',empty:'अभी कोई प्रोफ़ाइल नहीं।',
+noKyc:'टिक पाने के लिए पहले KYC जमा करें।',ok:'हो गया',tick:{common:'आम नागरिक',biz:'बिज़नेस (GST)',gov:'सरकार',opp:'विपक्ष',celeb:'सेलिब्रिटी',premium:'सेलिब्रिटी प्रीमियम'},
+rules:'नियम: 1 KYC पर अधिकतम 2 खाते (1 व्यक्तिगत + 1 बिज़नेस)। 1 GST पर 1 बिज़नेस खाता। मुख्य जानकारी सत्यापन के बाद लॉक। हर बदलाव सार्वजनिक।',
+pend:'लंबित KYC',approve:'मंज़ूर',reject:'अस्वीकार',view:'दस्तावेज़ देखें',tickSel:'टिक का प्रकार',demo:'वापस',last:'अंतिम बदलाव',notfound:'नहीं मिला',need:'पहले लॉग इन करें।',headline:'एक लाइन का परिचय (Google पर दिखेगा)',city:'शहर',category:'आप कौन हैं?',share:'आपका सार्वजनिक पेज',copy:'लिंक कॉपी',wa:'WhatsApp पर भेजें',strength:'पेज की मज़बूती',seo:'KYC सत्यापित होने के बाद ही आपका पेज Google पर दिखेगा।',cat:{Politician:'राजनेता',Celebrity:'सेलिब्रिटी',Business:'बिज़नेस / दुकान',Professional:'डॉक्टर / वकील / शिक्षक',Artist:'कलाकार / क्रिएटर',Journalist:'पत्रकार',Farmer:'किसान',Student:'विद्यार्थी',Other:'अन्य'}}};
+const TC={common:'#202122',biz:'#14866d',gov:'#1d9bf0',opp:'#1d9bf0',celeb:'#b8860b',premium:'#b8860b'};
+const t=k=>D[lang][k]||k,e=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id),v=id=>$(id)?$(id).value.trim():'';
+const tk=p=>p.verified?'<span class="tick" style="background:'+TC[p.tick]+'" title="'+e(t('tick')[p.tick])+'">✓</span>':'';
+const go=h=>{location.hash=h};
+function setLang(l){lang=l;localStorage.setItem('lang',l);document.documentElement.lang=l;route()}
+function nav(){$('nv').innerHTML='<a href="#/">'+t('home')+'</a>'+(U?'<a href="#/me">'+t('dash')+'</a>'+(ADM?'<a href="#/admin">'+t('admin')+'</a>':'')+'<a onclick="out()">'+t('logout')+'</a>':'<a href="#/auth">'+t('login')+' / '+t('signup')+'</a>')+
+ '<a onclick="setLang(\'en\')"'+(lang=='en'?' style="font-weight:700"':'')+'>EN</a>|<a onclick="setLang(\'hi\')"'+(lang=='hi'?' style="font-weight:700"':'')+'>हिं</a>'}
+async function out(){await sb.auth.signOut();U=null;ADM=false;go('#/')}
+async function init(){const{data}=await sb.auth.getSession();U=data.session?.user||null;await chkAdm();route()}
+async function chkAdm(){ADM=false;if(U){const{data}=await sb.from('admins').select('user_id').maybeSingle();ADM=!!data}}
+async function route(){nav();const h=location.hash.slice(2).split('/');window.scrollTo(0,0);
+ try{if(h[0]=='p')return await prof(h[1]);if(h[0]=='auth')return auth();if(h[0]=='me')return await me();if(h[0]=='admin')return await adm();await home()}catch(x){$('app').innerHTML='<div class="msg">'+e(x.message||x)+'</div>'}}
+addEventListener('hashchange',route);
+
+async function home(){const{data}=await sb.from('profiles').select('id,slug,name,tick,kind,verified').order('created_at',{ascending:false});
+ window._all=data||[];$('app').innerHTML='<h1>SatyaPedia</h1><div class="box">'+t('rules')+'</div><input id="q" placeholder="'+t('search')+'" oninput="flt()" style="width:100%"><div id="ls"></div>';flt()}
+function flt(){const q=v('q').toLowerCase(),a=window._all.filter(p=>p.name.toLowerCase().includes(q));
+ $('ls').innerHTML=a.length?'<ul>'+a.map(p=>'<li><a href="/p/'+p.slug+'">'+e(p.name)+'</a>'+tk(p)+' <small>('+t(p.kind)+')</small></li>').join('')+'</ul>':'<p>'+t('empty')+'</p>'}
+
+async function prof(id){const{data:p}=await sb.from('profiles').select('*').eq('id',id).maybeSingle();if(!p)return $('app').innerHTML='<p>'+t('notfound')+'</p>';
+ const{data:ed}=await sb.from('edits').select('*').eq('profile_id',id).order('at');const E=ed||[];
+ const lr=(k,x)=>x?'<tr class="lk"><th>'+t(k)+' 🔒</th><td>'+e(x)+'</td></tr>':'',er=(k,x)=>x?'<tr><th>'+t(k)+'</th><td>'+e(x)+'</td></tr>':'';
+ $('app').innerHTML='<h1>'+e(p.name)+tk(p)+'</h1><div class="info"><div class="ti">'+e(p.name)+'</div><table>'+lr('name',p.name)+lr('founder',p.founder)+lr('est',p.est)+(p.kind=='business'?lr('gst',p.gst):'')+er('address',p.address)+er('product',p.product)+
+ '<tr><th>'+t('kind')+'</th><td>'+t(p.kind)+' · '+e(t('tick')[p.tick])+(p.verified?'':' · ⏳')+'</td></tr></table></div>'+
+ (p.bio?'<h2>'+t('bio')+'</h2><p>'+e(p.bio)+'</p>':'')+(p.vals?'<h2>'+t('vals')+'</h2><p>'+e(p.vals)+'</p>':'')+
+ '<div class="foot"><b>'+t('log')+'</b> — '+t('total')+': <b>'+p.edits+'</b>'+(E.length?' · '+t('last')+': '+new Date(E[E.length-1].at).toLocaleString():'')+
+ '<table class="t"><tr><th>#</th><th>'+t('log')+'</th><th>Field</th><th>Old → New</th></tr>'+(E.length?E.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+new Date(x.at).toLocaleString()+'</td><td>'+t(x.field=='vals'?'vals':x.field)+'</td><td>'+e(x.old_v||'—')+' → '+e(x.new_v||'—')+'</td></tr>').join(''):'<tr><td colspan="4">'+t('none')+'</td></tr>')+'</table></div>'}
+
+function auth(){$('app').innerHTML='<h1>'+t('login')+' / '+t('signup')+'</h1><div class="box"><label>'+t('email')+'</label><input id="em" type="email" style="width:100%"><label>'+t('pass')+'</label><input id="pw" type="password" style="width:100%"><br><button class="p" onclick="lg()">'+t('login')+'</button> <button onclick="su()">'+t('signup')+'</button><div id="m"></div></div>'}
+async function lg(){const{error}=await sb.auth.signInWithPassword({email:v('em'),password:v('pw')});if(error)return $('m').innerHTML='<div class="msg">'+e(error.message)+'</div>';await init();go('#/me')}
+async function su(){const{data,error}=await sb.auth.signUp({email:v('em'),password:v('pw')});if(error)return $('m').innerHTML='<div class="msg">'+e(error.message)+'</div>';
+ if(data.session){await init();go('#/me')}else $('m').innerHTML='<div class="msg">✉ Check your email to confirm, then log in.</div>'}
+
+const str=p=>Math.round(['headline','city','address','product','vals','bio','founder','est'].filter(f=>p[f]).length/8*100);
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s.toUpperCase().replace(/[^A-Z0-9]/g,'')));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function me(){if(!U)return $('app').innerHTML='<p>'+t('need')+'</p>';
+ const{data:k}=await sb.from('kyc').select('*').eq('user_id',U.id).maybeSingle();const{data:ps}=await sb.from('profiles').select('*').eq('owner',U.id);const P=ps||[];
+ let h='<h1>'+t('dash')+'</h1><div class="box"><b>'+t('kycT')+'</b><br>'+(k?t('st')+': <b>'+t(k.status)+'</b> (…'+e(k.last4)+')':t('noKyc'))+'</div>';
+ if(!k||k.status=='rejected')h+='<div class="box"><label>'+t('docType')+'</label><select id="dt"><option>PAN</option><option>Aadhaar</option><option>Voter ID</option><option>Passport</option></select><label>'+t('idNo')+'</label><input id="idn"><label>'+t('file')+'</label><input id="fl" type="file" accept="image/*,.pdf"><br><button class="p" onclick="sendK()">'+t('submit')+'</button><div id="km"></div></div>';
+ P.forEach(p=>{const L=p.verified;const pu=location.origin+'/p/'+p.slug;h+='<div class="box"><b><a href="/p/'+p.slug+'">'+e(p.name)+'</a></b>'+tk(p)+' <small>('+t(p.kind)+')</small><br><small>'+t('share')+': <a href="/p/'+p.slug+'">'+e(pu)+'</a> · <a onclick="navigator.clipboard.writeText(\''+pu+'\');this.textContent=\'✓\'">'+t('copy')+'</a> · <a target="_blank" href="https://wa.me/?text='+encodeURIComponent(pu)+'">'+t('wa')+'</a><br>'+t('strength')+': <b>'+str(p)+'%</b>'+(p.verified?'':' · '+t('seo'))+'</small>'+
+  [['name',p.name],['founder',p.founder],['est',p.est]].concat(p.kind=='business'?[['gst',p.gst]]:[]).map(([f,x])=>'<label>'+t(f)+(L?' 🔒':'')+'</label><input id="'+p.id+f+'" value="'+e(x)+'" '+(L?'disabled':'')+' style="width:100%">').join('')+
+  ['headline','city','address','product','vals','bio'].map(f=>'<label>'+t(f)+'</label><textarea id="'+p.id+f+'" rows="2" style="width:100%">'+e(p[f])+'</textarea>').join('')+'<br><button class="p" onclick="sv(\''+p.id+'\','+L+','+(p.kind=='business')+')">'+t('save')+'</button> <span id="s'+p.id+'"></span></div>'});
+ const has=P.map(p=>p.kind),av=['personal','business'].filter(x=>!has.includes(x));
+ if(av.length)h+='<div class="box"><b>'+t('create')+'</b><label>'+t('kind')+'</label><select id="nk" onchange="$(\'gw\').style.display=this.value==\'business\'?\'block\':\'none\'">'+av.map(x=>'<option value="'+x+'">'+t(x)+'</option>').join('')+'</select>'+
+  '<label>'+t('name')+'</label><input id="nn" style="width:100%"><label>'+t('founder')+'</label><input id="nf" style="width:100%"><label>'+t('est')+'</label><input id="ne" style="width:100%"><div id="gw" style="display:'+(av[0]=='business'?'block':'none')+'"><label>'+t('gst')+'</label><input id="ng" style="width:100%"></div>'+
+  '<label>'+t('category')+'</label><select id="nc">'+Object.keys(t('cat')).map(x=>'<option value="'+x+'">'+e(t('cat')[x])+'</option>').join('')+'</select><label>'+t('city')+'</label><input id="nci" style="width:100%"><label>'+t('headline')+'</label><input id="nh" maxlength="160" style="width:100%"><label>'+t('address')+'</label><input id="na" style="width:100%"><br><button class="p" onclick="mk()">'+t('create')+'</button><div id="cm"></div></div>';
+ $('app').innerHTML=h+'<div class="box">'+t('rules')+'</div>'}
+async function sendK(){const f=$('fl').files[0],n=v('idn');if(!f||n.length<6)return $('km').innerHTML='<div class="msg">ID + file required</div>';
+ await sb.from('kyc').delete().eq('user_id',U.id);const path=U.id+'/'+Date.now()+'_'+f.name.replace(/[^\w.]/g,'_');
+ const up=await sb.storage.from('kyc').upload(path,f);if(up.error)return $('km').innerHTML='<div class="msg">'+e(up.error.message)+'</div>';
+ const{error}=await sb.from('kyc').insert({user_id:U.id,id_hash:await sha(n),last4:n.slice(-4),doc_type:v('dt'),doc_path:path});
+ if(error)return $('km').innerHTML='<div class="msg">'+(error.code=='23505'?'This ID is already used on another account.':e(error.message))+'</div>';me()}
+async function mk(){const b=v('nk')=='business',r={owner:U.id,kind:v('nk'),name:v('nn'),founder:v('nf'),est:v('ne'),address:v('na'),category:v('nc'),city:v('nci'),headline:v('nh')};if(b)r.gst=v('ng').toUpperCase();
+ if(!r.name)return;const{error}=await sb.from('profiles').insert(r);if(error)return $('cm').innerHTML='<div class="msg">'+(error.code=='23505'?'Already exists (GST used or account type exists).':e(error.message))+'</div>';me()}
+async function sv(id,L,b){const r={headline:v(id+'headline'),city:v(id+'city'),address:v(id+'address'),product:v(id+'product'),vals:v(id+'vals'),bio:v(id+'bio')};
+ if(!L){r.name=v(id+'name');r.founder=v(id+'founder');r.est=v(id+'est');if(b)r.gst=v(id+'gst').toUpperCase()}
+ const{error}=await sb.from('profiles').update(r).eq('id',id);$('s'+id).textContent=error?error.message:'✓ '+t('ok')}
+
+async function adm(){if(!ADM)return $('app').innerHTML='<p>No access</p>';
+ const{data}=await sb.from('kyc').select('*').eq('status','pending');const K=data||[];let h='<h1>'+t('pend')+' ('+K.length+')</h1>';
+ for(const k of K){const{data:s}=await sb.storage.from('kyc').createSignedUrl(k.doc_path,300);
+  h+='<div class="box">'+e(k.doc_type)+' …'+e(k.last4)+' · <a target="_blank" href="'+(s?.signedUrl||'#')+'">'+t('view')+'</a><br><label>'+t('tickSel')+'</label><select id="t'+k.user_id+'">'+Object.keys(TC).map(x=>'<option value="'+x+'">'+e(t('tick')[x])+'</option>').join('')+'</select> <button class="p" onclick="dec(\''+k.user_id+'\',1)">'+t('approve')+'</button> <button onclick="dec(\''+k.user_id+'\',0)">'+t('reject')+'</button></div>'}
+ $('app').innerHTML=h}
+async function dec(u,ok){if(ok){await sb.from('kyc').update({status:'verified'}).eq('user_id',u);
+  const{data:ps}=await sb.from('profiles').select('id,kind').eq('owner',u);const tk=v('t'+u);
+  for(const p of ps||[])await sb.from('profiles').update({verified:true,tick:p.kind=='business'?'biz':tk}).eq('id',p.id)}
+ else await sb.from('kyc').update({status:'rejected'}).eq('user_id',u);adm()}
+sb.auth.onAuthStateChange(()=>{});init();
+</script>
+</body>
+</html>

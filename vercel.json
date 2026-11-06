@@ -1,0 +1,5 @@
+{"rewrites":[
+{"source":"/p/:slug","destination":"/api/profile?slug=:slug"},
+{"source":"/hi/p/:slug","destination":"/api/profile?slug=:slug&lang=hi"},
+{"source":"/sitemap.xml","destination":"/api/sitemap"},
+{"source":"/robots.txt","destination":"/api/robots"}]}
