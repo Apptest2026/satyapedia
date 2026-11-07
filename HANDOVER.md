@@ -37,7 +37,7 @@ Always: match name on document with profile name. Approve → page gets tick, go
 Tick = factual status from official records, never SatyaPedia's opinion. If unsure → reject politely and ask for more proof. User's requested tick appears as "Claim" in admin; admin picks the final tick.
 
 ## 5. Categories (kept small on purpose)
-~14 main categories (Politician, Business, Health, Legal/Finance, Education, Sports, Celebrity, Artist, Journalist, Tech, Trades & Services, Farmer, Student, NGO/Social, Other). Specific job (e.g. "Cardiologist", "Cricketer") goes in the free-text **headline**, which is shown on Google. Later: look at the most common headlines and promote them to new categories (data-driven), add `specialty` column + hub pages `/city/surat`, `/category/health`.
+~14 main categories (Common person, Influencer/YouTuber/Creator, Politician, Business, Health, Legal/Finance, Education, Sports, Celebrity, Artist, Journalist, Tech, Trades & Services, Farmer, Student, NGO/Social, Other). Specific job (e.g. "Cardiologist", "Cricketer") goes in the free-text **headline**, which is shown on Google. Later: look at the most common headlines and promote them to new categories (data-driven), add `specialty` column + hub pages `/city/surat`, `/category/health`.
 
 ## 6. Deploy / rollback
 Deploy: upload/commit files to GitHub `main` → Vercel auto-builds in ~1 min.
@@ -93,3 +93,6 @@ Single-file `index.html` app (fine now; split into components when a developer j
 - **Out of scope for now:** jobs / funding / marriage ("Connect"), knowledge articles, places, products, photos, API, payments. Revisit only after trust operations are stable (scam and moderation risk).
 
 Schema run order: schema.sql → schema2 → schema3 → schema4 → schema5 → schema6 → schema7 → schema8.
+
+## 16. Creators / influencers
+Category `Influencer` (YouTuber, Instagrammer, streamer…) and category `Common` (ordinary person) exist. They use the **black common-person tick**. Extra proof for creators: control of the named channel/account (give them a code to place in the channel bio), tick the admin box "Control of the channel or account checked" so the page shows it. If a creator is also a public figure, use the Celebrity rules instead.
