@@ -78,7 +78,7 @@ Payments need a registered business (or proprietor) with a bank account and PAN 
 - Make someone admin: `insert into admins select id from auth.users where email='x@y.com';`
 - Unhide a page: `update profiles set hidden=false where slug='...';`
 - Delete a user's data on request: delete from `auth.users` (cascades to kyc/profiles/edits).
-- Locked field correction: `update profiles set name='...' where slug='...';` run as admin in SQL editor (trigger allows admin; logged manually).
+- Locked-field typo (name/founder/est/GST): owner uses My Account → "Mistake in a locked fact?" with proof; admin approves in Admin → "Locked-fact corrections" (applied and logged publicly). Before verification these fields are freely editable, so fix typos before the KYC approval.
 
 ## 14. Known limitations / tech debt
 Single-file `index.html` app (fine now; split into components when a developer joins); no automated tests; manual KYC; Hindi names get `profile-xxxxxx` slugs; no OG share image; reports have no CAPTCHA/rate limit. Data is standard Postgres + plain JS, so any developer can take over or migrate.
@@ -92,7 +92,7 @@ Single-file `index.html` app (fine now; split into components when a developer j
 - **Commercial independence:** sponsored content labelled; no selling private identity data; no removing accurate facts for payment.
 - **Out of scope for now:** jobs / funding / marriage ("Connect"), knowledge articles, places, products, photos, API, payments. Revisit only after trust operations are stable (scam and moderation risk).
 
-Schema run order: schema.sql → schema2 → schema3 → schema4 → schema5 → schema6 → schema7 → schema8.
+Schema run order: schema.sql → schema2 → schema3 → schema4 → schema5 → schema6 → schema7 → schema8 → schema9.
 
 ## 16. Creators / influencers
 Category `Influencer` (YouTuber, Instagrammer, streamer…) and category `Common` (ordinary person) exist. They use the **black common-person tick**. Extra proof for creators: control of the named channel/account (give them a code to place in the channel bio), tick the admin box "Control of the channel or account checked" so the page shows it. If a creator is also a public figure, use the Celebrity rules instead.
