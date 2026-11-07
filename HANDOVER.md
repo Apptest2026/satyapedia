@@ -82,3 +82,14 @@ Payments need a registered business (or proprietor) with a bank account and PAN 
 
 ## 14. Known limitations / tech debt
 Single-file `index.html` app (fine now; split into components when a developer joins); no automated tests; manual KYC; Hindi names get `profile-xxxxxx` slugs; no OG share image; reports have no CAPTCHA/rate limit. Data is standard Postgres + plain JS, so any developer can take over or migrate.
+
+## 15. Confirmed product policy (founder decisions)
+- **Verification is free.** No one can buy a tick or a better review. Paid services (if any) are separate and never affect verification. Free and paid pages follow identical standards. ("Verification is free. Trust is never for sale.")
+- **Profile deletion:** the owner can delete their own page any time (My Account → Delete this page). Deleting removes the page and its public history. Anyone else can send a "Removal request" through the report form.
+- **Corrections:** owners edit non-locked fields themselves (logged publicly); locked facts change only after admin review. Any visitor can report an error or suggest a correction ("Report an error / suggest a correction"), reviewed by admin.
+- **Scoped verification:** each verified page shows the date and exactly what the reviewer ticked (identity document / GST portal / official sources / owner KYC + admin page review) and what is not covered. Never tick a box that was not actually done. Public standards: `/verification`.
+- **New pages always need admin review.** Even if the owner's KYC is already verified, a new page starts unverified and appears in Admin → "Pages awaiting review". Limitation: the ID photo is deleted after the first review, so for later pages the admin judges consistency with the verified identity (and checks GST on the portal). Consider storing a "verified legal name" field in a future version.
+- **Commercial independence:** sponsored content labelled; no selling private identity data; no removing accurate facts for payment.
+- **Out of scope for now:** jobs / funding / marriage ("Connect"), knowledge articles, places, products, photos, API, payments. Revisit only after trust operations are stable (scam and moderation risk).
+
+Schema run order: schema.sql → schema2 → schema3 → schema4 → schema5 → schema6 → schema7 → schema8.
